@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- SEO Básico -->
+    <title>Gin Pratas - Joias em Prata Italiana de Luxo</title>
+    <meta name="description" content="Descubra a elegância atemporal no Gin Pratas. Oferecemos uma curadoria exclusiva de joias em prata italiana 925. Compre online com segurança e receba em todo o Brasil.">
+    <meta name="keywords" content="joias em prata, prata italiana, correntes, pulseiras, anéis, brincos, pingentes, joias online, prata 925">
+    <link rel="icon" href="images/logo.png" type="image/png">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Inter & Playfair Display -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    
+    <!-- Feather Icons -->
+    <script src="https://unpkg.com/feather-icons"></script>
+
+    <!-- AOS (Animate on Scroll) Library CSS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <!-- Estilos Internos -->
+    <style>
+        body {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            font-family: 'Inter', sans-serif;
+            background-color: #000000;
+            color: #ffffff;
+        }
+        .font-heading {
+            font-family: 'Playfair Display', serif;
+        }
+        .loader {
+            border-top-color: #D4AF37;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .loader-sm {
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #D4AF37;
+            border-radius: 50%;
+            width: 16px;
+            height: 16px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            vertical-align: middle;
+            margin-right: 8px;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 2px;
+            background-color: #D4AF37;
+            transition: all 300ms;
+        }
+        .nav-link:hover::after,
+        .nav-link.active::after {
+            width: 100%;
+        }
+        .wishlist-heart.active {
+            color: #D4AF37;
+            fill: currentColor;
+        }
+        .feather-star.filled {
+            fill: #FFD700;
+            color: #FFD700;
+        }
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+        .dropdown-menu, #search-overlay {
+            transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease;
+        }
+        .promo-banner {
+            background: linear-gradient(90deg, #D4AF37 0%, #C9A961 100%);
+            animation: pulse-subtle 2s ease-in-out infinite;
+        }
+        @keyframes pulse-subtle {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.95; }
+        }
+        .product-card {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            transition: all 0.3s ease;
+        }
+        .product-card:hover {
+            border-color: #D4AF37;
+            transform: translateY(-4px);
+            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.3);
+        }
+        .category-card {
+            position: relative;
+            overflow: hidden;
+            border-radius: 0.5rem;
+        }
+        .category-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.8) 100%);
+            z-index: 1;
+        }
+        .category-card:hover::before {
+            background: linear-gradient(180deg, transparent 0%, rgba(212,175,55,0.6) 100%);
+        }
+        .btn-primary {
+            background: linear-gradient(90deg, #D4AF37 0%, #C9A961 100%);
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            background: linear-gradient(90deg, #C9A961 0%, #B8964F 100%);
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.4);
+        }
+    </style>
+</head>
+<body class="bg-black text-white antialiased">
+
+    <!-- =========== Loader =========== -->
+    <div id="loader" class="fixed inset-0 bg-black z-50 flex items-center justify-center hidden">
+        <div class="loader border-4 border-gray-800 w-16 h-16"></div>
+    </div>
+
+    <!-- =========== Toast Notifications =========== -->
+    <div id="toast-notification" class="fixed top-20 right-4 z-50 flex flex-col items-end"></div>
+
+    <!-- =========== Topo / Barra de Anúncios =========== -->
+    <div class="promo-banner text-white text-center py-2 px-4 text-sm font-semibold">
+        <p>🔥 ANTECIPA BLACK: ATÉ 40% OFF + 5% DE DESCONTO NO PIX | FRETE GRÁTIS E ATÉ 5X SEM JUROS</p>
+    </div>
+
+    <!-- =========== Header / Barra de Navegação =========== -->
+    <header class="bg-black/95 backdrop-blur-lg sticky top-0 z-40 border-b border-gray-800">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <a href="#" data-page="inicio" class="block h-16 md:h-20 transition-all flex-shrink-0" aria-label="Voltar para a página inicial">
+                    <div class="h-full flex items-center">
+                        <h1 class="font-heading text-2xl md:text-3xl font-bold text-white">GIN <span class="text-yellow-600">PRATAS</span></h1>
+                    </div>
+                </a>
+                
+                <nav class="hidden lg:flex flex-grow justify-center" role="navigation" aria-label="Navegação Principal">
+                    <ul class="flex items-center space-x-8">
+                        <li><a href="#" data-page="inicio" class="nav-link font-semibold text-gray-300 hover:text-white transition-colors duration-300 relative py-2 px-3 block active" aria-current="page">INÍCIO</a></li>
+                        <li><a href="#" data-page="produtos" data-category-filter="correntes" class="nav-link font-semibold text-gray-300 hover:text-white transition-colors duration-300 relative py-2 px-3 block">CORRENTES</a></li>
+                        <li><a href="#" data-page="produtos" data-category-filter="pulseiras" class="nav-link font-semibold text-gray-300 hover:text-white transition-colors duration-300 relative py-2 px-3 block">PULSEIRAS</a></li>
+                        <li><a href="#" data-page="produtos" data-category-filter="conjuntos" class="nav-link font-semibold text-gray-300 hover:text-white transition-colors duration-300 relative py-2 px-3 block">CONJUNTOS</a></li>
+                        <li><a href="#" data-page="produtos" data-category-filter="aneis" class="nav-link font-semibold text-gray-300 hover:text-white transition-colors duration-300 relative py-2 px-3 block">ANÉIS</a></li>
+                        <li><a href="#" data-page="produtos" data-category-filter="brincos" class="nav-link font-semibold text-gray-300 hover:text-white transition-colors duration-300 relative py-2 px-3 block">BRINCOS</a></li>
+                        <li><a href="#" data-page="produtos" data-category-filter="pingentes" class="nav-link font-semibold text-gray-300 hover:text-white transition-colors duration-300 relative py-2 px-3 block">PINGENTES</a></li>
+                        <li><a href="#" data-page="sobre" class="nav-link font-semibold text-gray-300 hover:text-white transition-colors duration-300 relative py-2 px-3 block">SOBRE NÓS</a></li>
+                    </ul>
+                </nav>
+
+                <div class="flex items-center space-x-4">
+                    <button id="desktop-search-button" class="hidden lg:flex text-gray-300 hover:text-white transition-colors duration-300" aria-label="Abrir busca"><i data-feather="search"></i></button>
+                    <button id="cart-button" class="relative hidden lg:flex text-gray-300 hover:text-white transition-colors duration-300" aria-label="Abrir carrinho de compras" aria-haspopup="dialog">
+                        <i data-feather="shopping-cart"></i>
+                        <span id="cart-count" class="absolute -top-1 -right-1 bg-yellow-600 text-white text-xs font-bold rounded-full h-4 w-4 flex items-center justify-center hidden">0</span>
+                    </button>
+                    <button id="user-button" class="hidden md:flex text-gray-300 hover:text-white transition-colors duration-300" aria-label="Acessar sua conta"><i data-feather="user"></i></button>
+                    <button id="mobile-menu-button" class="lg:hidden relative z-[51] text-gray-300 hover:text-white transition-colors duration-300" aria-label="Abrir menu mobile" aria-expanded="false"><i data-feather="menu"></i></button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- =========== Sobreposição de Pesquisa =========== -->
+    <div id="search-overlay" class="fixed inset-0 bg-black/90 backdrop-blur-sm z-50 hidden flex-col items-center pt-24 px-4 opacity-0" aria-hidden="true">
+        <button id="close-search-overlay" class="absolute top-8 right-8 text-white/80 hover:text-white" aria-label="Fechar busca"><i data-feather="x" class="w-8 h-8"></i></button>
+        <div class="relative w-full max-w-2xl">
+            <i data-feather="search" class="absolute left-6 top-1/2 -translate-y-1/2 text-gray-400 w-6 h-6"></i>
+            <input type="text" id="search-input-overlay" placeholder="O que você está buscando?" class="w-full bg-white/10 text-white placeholder:text-gray-300 text-2xl font-semibold pl-16 pr-6 py-4 rounded-full border-2 border-transparent focus:border-yellow-600 focus:bg-white/20 focus:outline-none transition-all">
+        </div>
+        <div id="search-results-overlay" class="w-full max-w-2xl mt-6 bg-gray-900 rounded-lg shadow-xl max-h-[60vh] overflow-y-auto scrollbar-hide">
+            <!-- Resultados da pesquisa serão inseridos aqui -->
+        </div>
+    </div>
+
+
+    <!-- =========== Conteúdo Principal =========== -->
+    <main>
+        <!-- =========== Página: INICIO =========== -->
+        <div id="page-inicio" class="page-content">
+            <!-- Hero Section -->
+            <section class="relative h-[70vh] md:h-[85vh] bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?q=80&w=2070'); background-position: center;">
+                <div class="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black"></div>
+                <div class="container mx-auto px-6 h-full flex flex-col justify-center items-center text-center relative z-10" data-aos="fade-up">
+                    <h1 class="font-heading text-5xl md:text-7xl font-bold text-white leading-tight mb-6">O MENOR PREÇO<br><span class="text-yellow-600">DO ANO!</span></h1>
+                    <p class="text-xl md:text-2xl mb-4 max-w-3xl text-gray-200 leading-relaxed font-semibold">PRODUTOS SELECIONADOS COM ATÉ</p>
+                    <div class="text-6xl md:text-8xl font-bold text-yellow-600 mb-6">40% OFF</div>
+                    <div class="flex flex-wrap justify-center gap-4 mb-8">
+                        <div class="bg-yellow-600 text-white px-6 py-3 rounded-full font-bold text-sm">FRETE GRÁTIS</div>
+                        <div class="bg-yellow-600 text-white px-6 py-3 rounded-full font-bold text-sm">ATÉ 5X SEM JUROS</div>
+                        <div class="bg-yellow-600 text-white px-6 py-3 rounded-full font-bold text-sm">MAIS BRINDES SELECIONADOS!</div>
+                    </div>
+                    <a href="#produtos" class="btn-primary inline-flex items-center justify-center font-bold py-4 px-10 rounded-full text-lg shadow-2xl" aria-label="Ver Produtos">VER PRODUTOS</a>
+                </div>
+            </section>
+            
+            <!-- Seção de Promoções -->
+            <section id="produtos" class="bg-black py-16">
+                <div class="container mx-auto px-6">
+                    <div class="flex items-center justify-between mb-8" data-aos="fade-up">
+                        <h2 class="font-heading text-3xl md:text-4xl font-bold text-white">Promoção 🔥</h2>
+                        <a href="#todas-categorias" class="text-yellow-600 hover:text-red-400 font-semibold flex items-center gap-2">
+                            Ver todos <i data-feather="arrow-right" class="w-4 h-4"></i>
+                        </a>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" data-aos="fade-up" data-aos-delay="100">
+                        <!-- Produto 1 -->
+                        <div class="product-card rounded-lg overflow-hidden group">
+                            <div class="relative bg-black p-6 h-64 flex items-center justify-center">
+                                <span class="absolute top-4 left-4 bg-yellow-600 text-white text-xs font-bold px-3 py-1 rounded-full">-33%</span>
+                                <img src="https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?q=80&w=400" alt="Kit Corrente e Pulseira" class="h-full w-auto object-contain">
+                            </div>
+                            <div class="p-4">
+                                <h3 class="text-sm font-semibold text-white mb-2">Kit Corrente e Pulseira Grumet 2mm + Pingente - Prata Italiana</h3>
+                                <div class="flex items-center gap-2 mb-2">
+                                    <span class="text-gray-400 line-through text-sm">R$ 279,00</span>
+                                    <span class="text-yellow-600 font-bold text-lg">R$ 187,00</span>
+                                </div>
+                                <p class="text-green-400 text-xs font-semibold mb-3">R$ 177,65 com Pix</p>
+                                <button class="w-full bg-gray-800 hover:bg-yellow-600 text-white font-semibold py-2 px-4 rounded-full transition-all duration-300">Comprar</button>
+                            </div>
+                        </div>
+
+                        <!-- Produto 2 -->
+                        <div class="product-card rounded-lg overflow-hidden group">
+                            <div class="relative bg-black p-6 h-64 flex items-center justify-center">
+                                <span class="absolute top-4 left-4 bg-yellow-600 text-white text-xs font-bold px-3 py-1 rounded-full">-28%</span>
+                                <img src="https://images.unsplash.com/photo-1611591437281-460bfbe1220a?q=80&w=400" alt="Pulseira Grumet" class="h-full w-auto object-contain">
+                            </div>
+                            <div class="p-4">
+                                <h3 class="text-sm font-semibold text-white mb-2">Pulseira Grumet 3,5mm - Prata Italiana</h3>
+                                <div class="flex items-center gap-2 mb-2">
+                                    <span class="text-gray-400 line-through text-sm">R$ 125,00</span>
+                                    <span class="text-yellow-600 font-bold text-lg">R$ 89,90</span>
+                                </div>
+                                <p class="text-green-400 text-xs font-semibold mb-3">R$ 85,41 com Pix</p>
+                                <button class="w-full bg-gray-800 hover:bg-yellow-600 text-white font-semibold py-2 px-4 rounded-full transition-all duration-300">Comprar</button>
+                            </div>
+                        </div>
+
+                        <!-- Produto 3 -->
+                        <div class="product-card rounded-lg overflow-hidden group">
+                            <div class="relative bg-black p-6 h-64 flex items-center justify-center">
+                                <span class="absolute top-4 left-4 bg-yellow-600 text-white text-xs font-bold px-3 py-1 rounded-full">-22%</span>
+                                <img src="https://images.unsplash.com/photo-1601121141461-9d6647bca1ed?q=80&w=400" alt="Corrente Grumet" class="h-full w-auto object-contain">
+                            </div>
+                            <div class="p-4">
+                                <h3 class="text-sm font-semibold text-white mb-2">Corrente Grumet 2mm - Prata Italiana</h3>
+                                <div class="flex items-center gap-2 mb-2">
+                                    <span class="text-gray-400 line-through text-sm">R$ 179,00</span>
+                                    <span class="text-yellow-600 font-bold text-lg">R$ 139,00</span>
+                                </div>
+                                <p class="text-green-400 text-xs font-semibold mb-3">R$ 132,05 com Pix</p>
+                                <button class="w-full bg-gray-800 hover:bg-yellow-600 text-white font-semibold py-2 px-4 rounded-full transition-all duration-300">Comprar</button>
+                            </div>
+                        </div>
+
+                        <!-- Produto 4 -->
+                        <div class="product-card rounded-lg overflow-hidden group">
+                            <div class="relative bg-black p-6 h-64 flex items-center justify-center">
+                                <span class="absolute top-4 left-4 bg-yellow-600 text-white text-xs font-bold px-3 py-1 rounded-full">-8%</span>
+                                <img src="https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?q=80&w=400" alt="Corrente Grumet 4.5mm" class="h-full w-auto object-contain">
+                            </div>
+                            <div class="p-4">
+                                <h3 class="text-sm font-semibold text-white mb-2">Corrente Grumet 4,5mm - Prata Italiana</h3>
+                                <div class="flex items-center gap-2 mb-2">
+                                    <span class="text-gray-400 line-through text-sm">R$ 359,00</span>
+                                    <span class="text-yellow-600 font-bold text-lg">R$ 329,00</span>
+                                </div>
+                                <p class="text-green-400 text-xs font-semibold mb-3">R$ 312,55 com Pix</p>
+                                <button class="w-full bg-gray-800 hover:bg-yellow-600 text-white font-semibold py-2 px-4 rounded-full transition-all duration-300">Comprar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Seção de Categorias Principais -->
+            <section id="todas-categorias" class="bg-gradient-to-b from-black to-gray-900 py-20">
+                <div class="container mx-auto px-6">
+                    <div class="text-center mb-12" data-aos="fade-up">
+                        <h2 class="font-heading text-3xl md:text-4xl font-bold text-white mb-4">PRINCIPAIS CATEGORIAS</h2>
+                        <p class="text-gray-400 text-lg">Explore nossa coleção exclusiva de joias em prata italiana</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" data-aos="fade-up" data-aos-delay="100">
+                        <!-- Categoria 1 -->
+                        <a href="#correntes" class="category-card block h-80 relative group overflow-hidden rounded-lg">
+                            <img src="https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?q=80&w=800" alt="Correntes" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                            <div class="absolute inset-0 flex flex-col items-center justify-center z-10">
+                                <h3 class="font-heading text-4xl font-bold text-white mb-2">CORRENTES</h3>
+                                <p class="text-white/90 font-semibold">VER MAIS...</p>
+                            </div>
+                        </a>
+
+                        <!-- Categoria 2 -->
+                        <a href="#pulseiras" class="category-card block h-80 relative group overflow-hidden rounded-lg">
+                            <img src="https://images.unsplash.com/photo-1611591437281-460bfbe1220a?q=80&w=800" alt="Pulseiras" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                            <div class="absolute inset-0 flex flex-col items-center justify-center z-10">
+                                <h3 class="font-heading text-4xl font-bold text-white mb-2">PULSEIRAS</h3>
+                                <p class="text-white/90 font-semibold">VER MAIS...</p>
+                            </div>
+                        </a>
+
+                        <!-- Categoria 3 -->
+                        <a href="#conjuntos" class="category-card block h-80 relative group overflow-hidden rounded-lg">
+                            <img src="https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?q=80&w=800" alt="Conjuntos" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                            <div class="absolute inset-0 flex flex-col items-center justify-center z-10">
+                                <h3 class="font-heading text-4xl font-bold text-white mb-2">CONJUNTOS</h3>
+                                <p class="text-white/90 font-semibold">VER MAIS...</p>
+                            </div>
+                        </a>
+
+                        <!-- Categoria 4 -->
+                        <a href="#pingentes" class="category-card block h-80 relative group overflow-hidden rounded-lg">
+                            <img src="https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?q=80&w=800" alt="Pingentes" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                            <div class="absolute inset-0 flex flex-col items-center justify-center z-10">
+                                <h3 class="font-heading text-4xl font-bold text-white mb-2">PINGENTES</h3>
+                                <p class="text-white/90 font-semibold">VER MAIS...</p>
+                            </div>
+                        </a>
+
+                        <!-- Categoria 5 -->
+                        <a href="#aneis" class="category-card block h-80 relative group overflow-hidden rounded-lg">
+                            <img src="https://images.unsplash.com/photo-1605100804763-247f67b3557e?q=80&w=800" alt="Anéis" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                            <div class="absolute inset-0 flex flex-col items-center justify-center z-10">
+                                <h3 class="font-heading text-4xl font-bold text-white mb-2">ANÉIS</h3>
+                                <p class="text-white/90 font-semibold">VER MAIS...</p>
+                            </div>
+                        </a>
+
+                        <!-- Categoria 6 -->
+                        <a href="#brincos" class="category-card block h-80 relative group overflow-hidden rounded-lg">
+                            <img src="https://images.unsplash.com/photo-1535556116002-6281ff3e9f36?q=80&w=800" alt="Brincos" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                            <div class="absolute inset-0 flex flex-col items-center justify-center z-10">
+                                <h3 class="font-heading text-4xl font-bold text-white mb-2">BRINCOS</h3>
+                                <p class="text-white/90 font-semibold">VER MAIS...</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Seção de Benefícios -->
+            <section class="bg-black py-16 border-t border-gray-800">
+                <div class="container mx-auto px-6">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-12 text-center" data-aos="fade-up">
+                        <div class="flex flex-col items-center">
+                            <div class="bg-yellow-600/10 p-4 rounded-full mb-4">
+                                <i data-feather="award" class="h-10 w-10 text-yellow-600"></i>
+                            </div>
+                            <h3 class="font-bold text-xl text-white mb-2">100% Prata Italiana</h3>
+                            <p class="text-gray-400 text-sm leading-relaxed">Todas as nossas peças são confeccionadas em prata italiana 925 certificada.</p>
+                        </div>
+                        <div class="flex flex-col items-center">
+                            <div class="bg-yellow-600/10 p-4 rounded-full mb-4">
+                                <i data-feather="box" class="h-10 w-10 text-yellow-600"></i>
+                            </div>
+                            <h3 class="font-bold text-xl text-white mb-2">Embalagem Premium</h3>
+                            <p class="text-gray-400 text-sm leading-relaxed">Cada joia é entregue em uma embalagem exclusiva, perfeita para presentear.</p>
+                        </div>
+                        <div class="flex flex-col items-center">
+                            <div class="bg-yellow-600/10 p-4 rounded-full mb-4">
+                                <i data-feather="truck" class="h-10 w-10 text-yellow-600"></i>
+                            </div>
+                            <h3 class="font-bold text-xl text-white mb-2">Frete Grátis</h3>
+                            <p class="text-gray-400 text-sm leading-relaxed">Envio gratuito para todo o Brasil em compras acima de R$ 200.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- =========== Footer =========== -->
+    <footer class="bg-gray-900 text-gray-400 py-12 border-t border-gray-800">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+                <div>
+                    <h3 class="font-heading text-2xl font-bold text-white mb-4">GIN <span class="text-yellow-600">JOIAS</span></h3>
+                    <p class="text-sm leading-relaxed">Elegância e sofisticação em cada detalhe. Joias em prata italiana que contam sua história.</p>
+                </div>
+                <div>
+                    <h4 class="font-bold text-white mb-4">Categorias</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#correntes" class="hover:text-yellow-600 transition-colors">Correntes</a></li>
+                        <li><a href="#pulseiras" class="hover:text-yellow-600 transition-colors">Pulseiras</a></li>
+                        <li><a href="#aneis" class="hover:text-yellow-600 transition-colors">Anéis</a></li>
+                        <li><a href="#brincos" class="hover:text-yellow-600 transition-colors">Brincos</a></li>
+                        <li><a href="#pingentes" class="hover:text-yellow-600 transition-colors">Pingentes</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-white mb-4">Atendimento</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="como-comprar.html" class="hover:text-yellow-600 transition-colors">Como Comprar</a></li>
+                        <li><a href="checkout.html" class="hover:text-yellow-600 transition-colors">Finalizar Compra</a></li>
+                        <li><a href="politica-trocas.html" class="hover:text-yellow-600 transition-colors">Trocas e Devoluções</a></li>
+                        <li><a href="politica-privacidade.html" class="hover:text-yellow-600 transition-colors">Política de Privacidade</a></li>
+                        <li><a href="admin.html" class="hover:text-yellow-600 transition-colors">Painel Admin</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-white mb-4">Contato</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li class="flex items-center gap-2"><i data-feather="mail" class="w-4 h-4"></i> contato@ginpratas.com.br</li>
+                        <li class="flex items-center gap-2"><i data-feather="phone" class="w-4 h-4"></i> (11) 99999-9999</li>
+                        <li class="flex items-center gap-2"><i data-feather="instagram" class="w-4 h-4"></i> @ginpratas</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 pt-8 text-center text-sm">
+                <p>&copy; 2024 Gin Pratas. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script type="module" src="./script.js"></script>
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 800,
+            once: true,
+            offset: 100
+        });
+
+        // Feather Icons will be initialized by script.js after content is loaded
+
+        // Mobile Menu Toggle
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        if (mobileMenuButton && mobileMenu) {
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+        }
+
+        // Search Overlay
+        const searchButton = document.getElementById('desktop-search-button');
+        const searchOverlay = document.getElementById('search-overlay');
+        const closeSearchButton = document.getElementById('close-search-overlay');
+        
+        if (searchButton) {
+            searchButton.addEventListener('click', () => {
+                searchOverlay.classList.remove('hidden');
+                searchOverlay.classList.add('flex');
+                setTimeout(() => searchOverlay.classList.remove('opacity-0'), 10);
+            });
+        }
+        
+        if (closeSearchButton) {
+            closeSearchButton.addEventListener('click', () => {
+                searchOverlay.classList.add('opacity-0');
+                setTimeout(() => {
+                    searchOverlay.classList.add('hidden');
+                    searchOverlay.classList.remove('flex');
+                }, 300);
+            });
+        }
+
+        // Navigation Links
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', (e) => {
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                link.classList.add('active');
+            });
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+{
+  "name": "gin-pratas",
+  "version": "1.0.0",
+  "description": "Loja online de joias em prata italiana",
+  "main": "index.html",
+  "scripts": {
+    "dev": "python3 -m http.server 8000",
+    "preview": "python3 -m http.server 8000"
+  },
+  "keywords": [
+    "joias",
+    "prata",
+    "ecommerce"
+  ],
+  "author": "Gin Pratas",
+  "license": "MIT"
+}

@@ -1,0 +1,243 @@
+/* =================================================================
+   ESTILOS GLOBAIS E TIPOGRAFIA
+================================================================= */
+body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.font-heading {
+    font-family: 'Playfair Display', serif;
+}
+
+/* Custom Loader for global loader */
+.loader {
+    border-top-color: #333; /* Cor escura para o loader */
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Small loader for buttons */
+.loader-sm {
+    border: 2px solid #f3f3f3; /* Light grey */
+    border-top: 2px solid #333; /* Dark color */
+    border-radius: 50%;
+    width: 16px;
+    height: 16px;
+    animation: spin 1s linear infinite;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 8px;
+}
+
+
+/* =================================================================
+   HEADER E NAVEGAÇÃO
+================================================================= */
+.nav-link {
+    @apply font-semibold text-slate-600 hover:text-black transition-colors duration-300 relative py-2 px-3 block;
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 2px;
+    @apply bg-black transition-all duration-300;
+}
+
+.nav-link:hover::after,
+.nav-link.active::after {
+    width: 100%;
+}
+
+.nav-icon {
+    @apply text-slate-500 hover:text-black transition-colors duration-300;
+}
+
+.cart-count-badge {
+    @apply absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full h-4 w-4 flex items-center justify-center;
+}
+
+.mobile-nav-link {
+    @apply block px-4 py-2 text-slate-700 hover:bg-slate-100 rounded-md transition-colors duration-200;
+}
+
+.mobile-bottom-nav-link {
+    @apply relative flex-grow text-center py-2;
+}
+
+.mobile-bottom-nav-link.active {
+    @apply text-black;
+}
+
+/* =================================================================
+   BOTÕES GLOBAIS
+================================================================= */
+.btn {
+    @apply inline-flex items-center justify-center font-semibold py-3 px-8 rounded-full transition-all duration-300 ease-in-out;
+}
+
+.btn-primary {
+    @apply bg-slate-900 text-white hover:bg-black shadow-lg hover:shadow-xl; /* Cor primária alterada */
+}
+
+.btn-secondary {
+    @apply bg-slate-200 text-slate-800 hover:bg-slate-300;
+}
+
+/* =================================================================
+   SEÇÕES DA PÁGINA INICIAL
+================================================================= */
+.category-card {
+    @apply relative block h-64 rounded-lg overflow-hidden shadow-lg transform transition-all duration-300 hover:scale-[1.02] hover:shadow-xl;
+    background-size: cover;
+    background-position: center;
+}
+
+.category-card-overlay {
+    @apply absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center transition-all duration-300 hover:bg-opacity-60;
+}
+
+.category-card-title {
+    @apply text-white font-heading text-3xl font-bold;
+}
+
+/* =================================================================
+   CARDS DE PRODUTO
+================================================================= */
+.group:hover .quick-view-btn {
+    opacity: 1;
+}
+
+.wishlist-heart {
+    @apply text-slate-400 hover:text-red-500 transition-colors duration-200;
+}
+
+.wishlist-heart.active {
+    @apply text-red-500 fill-current; /* Fill heart when active */
+}
+
+/* Estilo para o novo botão de adicionar ao carrinho no hover */
+.product-card-btn {
+    @apply absolute bottom-4 left-1/2 -translate-x-1/2 w-4/5 bg-slate-900 text-white py-2 px-4 rounded-full transition-all duration-300 opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0;
+}
+
+/* Cor dourada para as estrelas */
+.feather-star.filled {
+    fill: #B8860B;
+    color: #B8860B;
+}
+
+/* Fly to cart animation */
+.fly-to-cart {
+    position: fixed;
+    transition: all 1s cubic-bezier(0.5, -0.5, 0.5, 1.5); /* Adjust cubic-bezier for desired effect */
+    border-radius: 50%;
+    object-fit: cover;
+    z-index: 100; /* Ensure it's above other elements */
+}
+
+/* Custom styles for price range slider */
+input[type="range"].range-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    background: #333; /* Cor escura */
+    border-radius: 50%;
+    cursor: pointer;
+    margin-top: -7px; /* Adjust to align with track */
+    box-shadow: 0 0 0 4px rgba(51, 51, 51, 0.2); /* Ring effect */
+}
+
+input[type="range"].range-slider::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    background: #333;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 0 0 4px rgba(51, 51, 51, 0.2);
+}
+
+/* Hide scrollbar for horizontal product list */
+.scrollbar-hide {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+.scrollbar-hide::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+}
+
+
+/* =================================================================
+   FOOTER
+================================================================= */
+.footer-link {
+    @apply text-slate-400 hover:text-white transition-colors duration-200;
+}
+
+/* =================================================================
+   MODAIS
+================================================================= */
+/* General modal overlay transition */
+#cart-modal-overlay,
+#product-details-modal-overlay,
+#auth-modal-overlay,
+#confirmation-modal-overlay {
+    transition: opacity 0.3s ease-in-out;
+    opacity: 1; /* Default to visible for transition, hidden by JS */
+}
+
+#cart-modal-overlay.hidden,
+#product-details-modal-overlay.hidden,
+#auth-modal-overlay.hidden,
+#confirmation-modal-overlay.hidden {
+    opacity: 0;
+}
+
+/* Modal specific transitions (for transform/scale) */
+#cart-modal,
+#product-details-modal,
+#auth-modal,
+#confirmation-modal {
+    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+}
+
+#product-details-modal.hidden,
+#auth-modal.hidden,
+#confirmation-modal.hidden {
+    transform: scale(0.95);
+    opacity: 0;
+    visibility: hidden;
+}
+
+#cart-modal.translate-x-full {
+    transform: translateX(100%);
+}
+
+#cart-modal.hidden {
+    visibility: hidden;
+}
+
+/* Ensure modals are visible when active */
+#product-details-modal:not(.hidden),
+#auth-modal:not(.hidden),
+#confirmation-modal:not(.hidden) {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+    visibility: visible;
+}
+
+#cart-modal:not(.translate-x-full) {
+    transform: translateX(0);
+    visibility: visible;
+}
